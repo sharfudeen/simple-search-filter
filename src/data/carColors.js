@@ -1,0 +1,1 @@
+export const CarColors = ["red","orange","yellow","green","blue","indigo","violet"];

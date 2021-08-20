@@ -1,24 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { React, useState, useEffect } from "react";
+import SearchFilter from "./components/filter";
+import Cars from "./components/cars";
+import "./App.css";
+import axios from "axios";
+
+const getCars = () => {
+  return axios.get("https://5cdd0a92b22718001417c19d.mockapi.io/api/cars");
+};
 
 function App() {
+  const [carsDetails, setCarsDetails] = useState([]);
+  console.log("carDeatils", carsDetails);
+  const [searchText, setSearchText] = useState("");
+  useEffect(() => {
+    getCars().then((response) => {
+      setCarsDetails(response.data);
+    });
+  }, []);
+  const handleSearchText = (value) => {
+    setSearchText(value);
+    if (value === "") {
+      getCars().then((response) => {
+        setCarsDetails(response.data);
+      });
+    } else {
+      setCarsDetails(
+        carsDetails.filter((carsDetails, index) => {
+          return (carsDetails.productName) == value;
+        })
+      );
+    }
+  };
+  console.log("searchText ::", searchText);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div className="flex flex-row flex-wrap w-10/12 mx-auto mt-10">
+        <div className="w-full">
+          <input
+            type="text"
+            name="search"
+            className="w-full px-3 py-1 border-2 rounded-md focus:outline-none"
+            placeholder="Search"
+            onChange={(e) => handleSearchText(e.target.value)}
+          />
+        </div>
+        <SearchFilter />
+        <Cars carsDetails={carsDetails} />
+      </div>
+    </>
   );
 }
 
