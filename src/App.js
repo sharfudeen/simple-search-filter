@@ -31,6 +31,12 @@ function App() {
       );
     }
   };
+  const handleRadioSearch = (val) => {
+    console.log("radio button works :::", val);
+    setCarsDetails(carsDetails.filter((item) => {
+      return (item.carColor) === val;
+    }))
+  };
   console.log("searchText ::", searchText);
   return (
     <>
@@ -44,7 +50,7 @@ function App() {
             onChange={(e) => handleSearchText(e.target.value)}
           />
         </div>
-        <SearchFilter />
+        <SearchFilter handleRadio={handleRadioSearch} />
         <Cars carsDetails={carsDetails} />
       </div>
     </>
